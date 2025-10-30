@@ -41,75 +41,99 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header/Navigation */}
-      <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/60 backdrop-blur-2xl supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-20 items-center justify-between px-4">
-          <img src={logo} alt="Catcht Logo" className="h-12 w-auto transition-transform duration-300 hover:scale-105" />
-          <nav className="flex gap-8">
-            <button 
-              onClick={() => scrollToSection("machines")} 
-              className="relative text-sm font-semibold text-foreground/80 hover:text-primary transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+      {/* Animated multicolor bar at top */}
+      <div className="fixed top-0 left-0 z-50 w-full h-1 [background-size:200%_100%] bg-[linear-gradient(90deg,hsl(var(--primary)),hsl(var(--secondary)),hsl(var(--accent)),hsl(var(--primary)))] animate-marquee"></div>
+      <div className="fixed top-6 left-1/2 z-50 -translate-x-1/2 flex items-center gap-8">
+        <div className="w-[700px] min-w-[350px] max-w-3xl grid grid-cols-3 rounded-full border border-white/20 bg-background/50 shadow-lg backdrop-blur-3xl backdrop-saturate-200 supports-[backdrop-filter]:bg-background/50 h-16 px-10">
+          <div className="flex items-center h-full">
+            <button
+              onClick={() => scrollToSection('machines')}
+              className="relative whitespace-nowrap text-base font-semibold text-white hover:text-primary transition-all duration-300 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-10/12"
+              style={{textShadow: '0 2px 8px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.4)'}}
             >
               Nos Machines
             </button>
-            <button 
-              onClick={() => scrollToSection("disponibilites")} 
-              className="relative text-sm font-semibold text-foreground/80 hover:text-primary transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
+          </div>
+          <div className="flex items-center justify-center h-full">
+            <img src={logo} alt="Catcht Logo" className="h-12 w-auto transition-transform duration-300 hover:scale-105 drop-shadow-[0_2px_8px_rgba(0,0,0,0.3)]" />
+          </div>
+          <div className="flex items-center justify-end h-full">
+            <button
+              onClick={() => scrollToSection('disponibilites')}
+              className="relative whitespace-nowrap text-base font-semibold text-white hover:text-primary transition-all duration-300 after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-10/12"
+              style={{textShadow: '0 2px 8px rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.4)'}}
             >
               Disponibilités
             </button>
-            <button 
-              onClick={() => scrollToSection("contact")} 
-              className="relative text-sm font-semibold text-foreground/80 hover:text-primary transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full"
-            >
-              Contact
-            </button>
-          </nav>
+          </div>
         </div>
-      </header>
+        <a
+          href="mailto:contact@catcht.fr"
+          aria-label="Contact"
+          className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-white/20 bg-background/50 backdrop-blur-2xl backdrop-saturate-150 text-white shadow-md transition-all duration-300 hover:shadow-lg hover:scale-105"
+        >
+          <Mail className="h-5 w-5" />
+        </a>
+      </div>
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden max-h-screen flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10"></div>
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.15),transparent_50%),radial-gradient(circle_at_70%_50%,hsl(var(--secondary)/0.15),transparent_50%)]"></div>
-        <div className="absolute top-20 left-10 w-72 h-72 bg-primary/20 rounded-full blur-[120px] animate-float"></div>
-        <div className="absolute bottom-20 right-10 w-96 h-96 bg-secondary/20 rounded-full blur-[120px] animate-float" style={{ animationDelay: "-3s" }}></div>
-        
-        <div className="container mx-auto px-4 py-20 lg:py-32 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-left space-y-6 animate-fade-in-up">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 text-primary text-sm font-semibold mb-4">
-                <Sparkles className="h-4 w-4" />
-                Nouveau concept en France
-              </div>
-              <h1 className="text-5xl lg:text-7xl font-extrabold leading-tight">
-                <span className="bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-                  Cartes Pokémon
-                </span>
-                <br />
-                <span className="text-foreground">en distributeur</span>
-              </h1>
-              <p className="text-xl text-muted-foreground max-w-xl leading-relaxed">
-                Vivez une expérience unique avec nos distributeurs automatiques de cartes Pokémon. Des boosters surprise disponibles 24h/24 !
-              </p>
-              <div className="flex gap-4 pt-4">
-                <Button onClick={() => scrollToSection("machines")} size="lg" className="gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                  Découvrir nos machines
-                  <Package className="h-4 w-4" />
-                </Button>
-                <Button onClick={() => scrollToSection("disponibilites")} variant="outline" size="lg" className="gap-2 hover:scale-105 transition-all duration-300">
-                  Voir les boosters
-                </Button>
-              </div>
+      {/* Hero Section - Immersive Branding */}
+      <section
+        className="relative min-h-[800px] flex items-center justify-center overflow-hidden py-12 md:py-0"
+        style={{ minHeight: '100vh', maxHeight: '1000px' }}
+      >
+        {/* Main animated background gradient, subtle animation */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#FFDEE9] via-[#B5C6E0] to-[#6699FF] hero-bg-animate"></div>
+        {/* Decorative blobs / glows for poké ambiance */}
+        <div className="absolute top-14 left-1/4 md:left-[24%] w-60 h-60 bg-[#ff4d4d44] rounded-full blur-[110px] animate-drift-slow"></div>
+        <div className="absolute bottom-24 right-10 w-[19rem] h-[19rem] bg-[#FFD84A22] rounded-full blur-[160px] animate-drift-slow" style={{ animationDelay: '-3s' }}></div>
+        <div className="absolute top-[55%] left-1/2 w-16 h-16 bg-[#4A7BFF33] rounded-full blur-2xl animate-drift" style={{ animationDuration: '8s', animationDelay: '-1s' }}></div>
+        {/* Subtle highlight behind text for readability */}
+        <div className="absolute left-0 right-0 mx-auto top-1/2 -translate-y-1/2 w-[700px] max-w-full h-[350px] bg-white/30 blur-3xl z-10 md:block hidden pointer-events-none" />
+        <div className="container mx-auto px-4 relative z-20 flex flex-col md:flex-row items-center justify-between gap-12 md:gap-20 min-h-[650px]">
+          {/* Bloc texte - centré verticalement avec la machine à droite */}
+          <div className="flex-1 min-w-[320px] flex flex-col items-center md:items-start justify-center md:pl-10 md:pr-8">
+            <div className="badge-glossy inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-[2px] border border-primary/20 text-primary text-sm font-semibold mb-2 mt-2 md:mb-4 md:mt-0 select-none">
+              <Sparkles className="h-4 w-4" />
+              Nouveau concept en France
             </div>
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-secondary/30 to-accent/20 rounded-3xl blur-[80px]"></div>
-              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl"></div>
-              <img 
-                src={distributeur} 
-                alt="Distributeur Pokémon Catcht" 
-                className="relative rounded-2xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] animate-float w-full h-auto select-none pointer-events-none"
-                draggable="false"
-              />
+            <h1
+              className="hero-halo font-outfit font-extrabold text-[2rem] md:text-[2.8rem] lg:text-[3.3rem] tracking-tight text-center md:text-left pb-2 max-w-[750px]"
+              style={{lineHeight: '1.4'}}
+            >
+              Attrapez vos cartes<br />
+              <span className="gradient-chrome-text">Pokémon</span>, à tout moment.
+            </h1>
+            <p className="font-manrope text-lg md:text-xl opacity-90 text-center md:text-left max-w-[600px] mb-8 mt-3 md:mb-9 md:mt-5" style={{lineHeight: '1.8'}}>
+              Découvrez nos distributeurs automatiques Pokémon :<br />
+              une nouvelle façon d'ouvrir vos boosters, 24h/24, partout en France.
+            </p>
+            {/* Buttons centrés sous le texte */}
+            <div className="flex flex-col md:flex-row gap-4 md:gap-7 w-full md:w-auto items-center justify-center md:justify-start">
+              <Button onClick={() => scrollToSection("machines")} size="lg" className="gap-2 px-7 shadow-lg hover:shadow-xl font-manrope font-semibold text-base">
+                Découvrir nos machines
+                <Package className="h-5 w-5" />
+              </Button>
+              <Button onClick={() => scrollToSection("disponibilites")} variant="outline" size="lg" className="gap-2 px-7 font-manrope font-semibold text-base">
+                Voir les boosters
+              </Button>
+            </div>
+          </div>
+          {/* Machine - alignée verticalement au center sur grand écran, toujours visible mais jamais plus imposante que le texte visuellement */}
+          <div className="flex-1 w-full flex items-center justify-center pt-12 pb-6 md:py-0">
+            <div className="relative md:w-[480px] w-[95vw] max-w-[380px] md:max-w-[480px]">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-secondary/30 to-accent/20 rounded-3xl blur-[65px]"></div>
+              <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl"></div>
+              {/* Image loading skeleton */}
+              <div className="relative">
+                <div className="absolute inset-0 rounded-2xl bg-muted/50 [background-size:200%_100%] bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.6),transparent)] animate-shimmer"></div>
+                <img
+                  src={distributeur}
+                  alt="Distributeur Pokémon Catcht"
+                  className="relative rounded-2xl shadow-[0_20px_70px_-15px_rgba(0,0,0,0.29)] w-full h-auto select-none pointer-events-none opacity-0 animate-fade-in"
+                  draggable="false"
+                  onLoad={(e) => { (e.currentTarget.previousElementSibling as HTMLElement).style.display = 'none'; e.currentTarget.style.opacity = '1'; }}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -429,140 +453,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Section Contact */}
-      <section id="contact" className="container mx-auto px-4 py-24">
-        <div className="text-center mb-16">
-          <h2 className="text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Contactez-nous
-          </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Une question ? Un problème ? Envoyez-nous un message
-          </p>
-        </div>
-        
-        <div className="max-w-3xl mx-auto">
-          <Card className="border-2 border-primary/20 shadow-xl">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-3xl">
-                <div className="p-3 bg-primary/10 rounded-xl">
-                  <Mail className="h-7 w-7 text-primary" />
-                </div>
-                Envoyez-nous un message
-              </CardTitle>
-              <CardDescription className="text-base">
-                Remplissez le formulaire ci-dessous et nous vous répondrons rapidement
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-semibold text-foreground">
-                    Nom complet
-                  </label>
-                  <Input
-                    id="name"
-                    type="text"
-                    placeholder="Votre nom"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    required
-                    className="h-12 border-2 focus:border-primary transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-semibold text-foreground">
-                    Email
-                  </label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="votre.email@exemple.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    required
-                    className="h-12 border-2 focus:border-primary transition-colors"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <label htmlFor="message" className="text-sm font-semibold text-foreground">
-                    Message
-                  </label>
-                  <Textarea
-                    id="message"
-                    placeholder="Décrivez votre question, suggestion ou problème..."
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    required
-                    className="min-h-[150px] border-2 focus:border-primary transition-colors resize-none"
-                  />
-                </div>
-
-                <Button 
-                  type="submit" 
-                  size="lg" 
-                  className="w-full gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="h-4 w-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin"></div>
-                      Envoi en cours...
-                    </>
-                  ) : (
-                    <>
-                      <Mail className="h-5 w-5" />
-                      Envoyer le message
-                    </>
-                  )}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-
-          <div className="grid md:grid-cols-2 gap-6 mt-8">
-            <Card className="border-2 hover:border-primary/30 hover:shadow-lg transition-all duration-300">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-primary/10 rounded-xl">
-                    <Mail className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Email direct</h4>
-                    <a 
-                      href="mailto:contact@catcht.fr" 
-                      className="text-sm text-primary hover:text-primary/80 transition-colors"
-                    >
-                      contact@catcht.fr
-                    </a>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-2 hover:border-secondary/30 hover:shadow-lg transition-all duration-300">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 bg-secondary/10 rounded-xl">
-                    <Phone className="h-6 w-6 text-secondary" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold mb-1">Téléphone</h4>
-                    <a 
-                      href="tel:+33123456789" 
-                      className="text-sm text-secondary hover:text-secondary/80 transition-colors"
-                    >
-                      01 23 45 67 89
-                    </a>
-                    <p className="text-xs text-muted-foreground mt-1">Lun-Ven, 9h-18h</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
+      {/* Section Contact removed as per request */}
 
       {/* Footer */}
       <footer className="relative border-t bg-gradient-to-br from-card to-muted/30 mt-24 overflow-hidden">

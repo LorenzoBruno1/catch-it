@@ -126,4 +126,99 @@ All colors MUST be HSL.
   .animate-fade-in-up {
     animation: fadeInUp 0.6s ease-out forwards;
   }
+
+  /* Text shimmer utility for gradient text */
+  .animate-shimmer {
+    background-size: 200% 100%;
+    animation: shimmer 6s ease-in-out infinite;
+  }
+
+  /* Seamless marquee for top gradient bar */
+  @keyframes marquee {
+    0% { background-position: 0% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .animate-marquee {
+    animation: marquee 10s linear infinite;
+  }
+
+  /* Organic drift animations for hero glows */
+  @keyframes drift {
+    0% { transform: translate(0, 0) scale(1); }
+    25% { transform: translate(20px, -10px) scale(1.03); }
+    50% { transform: translate(0, -20px) scale(1); }
+    75% { transform: translate(-20px, -10px) scale(1.04); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+  .animate-drift-slow { animation: drift 14s ease-in-out infinite; }
+  .animate-drift { animation: drift 9s ease-in-out infinite; }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 600ms ease-out forwards;
+  }
+}
+
+/* Halo blanc flou autour du texte principal */
+.hero-halo {
+  filter: drop-shadow(0 0 20px rgba(255,255,255,0.2));
+}
+
+/* Chrome gradient animé sur mot "Pokémon" */
+.gradient-chrome-text {
+  background: linear-gradient(90deg,#FF4D4D 0%,#4A7BFF 45%,#FFD84A 100%);
+  background-size: 200% 100%;
+  background-position: 0% 50%;
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  position: relative;
+  animation: chromereflect 10s ease-in-out infinite;
+}
+@keyframes chromereflect {
+  0%,100%{background-position:0% 50%}
+  30%{background-position:100% 50%}
+  80%{background-position:0% 50%}
+}
+
+/* Subtile mouvement du fond hero */
+.hero-bg-animate {
+  animation: hero-fade-move 20s ease-in-out infinite;
+}
+@keyframes hero-fade-move {
+  0%,100%{filter: blur(0px) brightness(1);}
+  10%{filter: blur(3px) brightness(1.06);}
+  50%{filter: blur(2.5px) brightness(1.12);}
+  70%{filter: blur(1.5px) brightness(1.04);}
+}
+
+/* Effet brillance badge */
+.badge-glossy {
+  position: relative;
+  overflow: hidden;
+}
+.badge-glossy::after {
+  content: '';
+  position: absolute;
+  left: -45%;
+  top: -40%;
+  width: 190%;
+  height: 180%;
+  background: linear-gradient(60deg,rgba(255,255,255,0.18) 20%,rgba(255,255,255,0) 70%);
+  transform: skewX(-12deg);
+  animation: badge-gloss-move 3.5s cubic-bezier(.77,0,.18,1) infinite;
+}
+@keyframes badge-gloss-move {
+  0%,100% { left: -45%; opacity: 0.6; }
+  50% { left: 60%; opacity: 1; }
 }
