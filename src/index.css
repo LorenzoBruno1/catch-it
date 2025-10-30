@@ -99,6 +99,15 @@ All colors MUST be HSL.
     }
   }
   
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
   @keyframes fadeInUp {
     from {
       opacity: 0;
@@ -121,6 +130,11 @@ All colors MUST be HSL.
   
   .animate-float {
     animation: float 6s ease-in-out infinite;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0;
   }
   
   .animate-fade-in-up {
@@ -152,21 +166,6 @@ All colors MUST be HSL.
   }
   .animate-drift-slow { animation: drift 14s ease-in-out infinite; }
   .animate-drift { animation: drift 9s ease-in-out infinite; }
-
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: scale(0.98);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
-  .animate-fade-in {
-    animation: fadeIn 600ms ease-out forwards;
-  }
 }
 
 /* Halo blanc flou autour du texte principal */
@@ -222,3 +221,80 @@ All colors MUST be HSL.
   0%,100% { left: -45%; opacity: 0.6; }
   50% { left: 60%; opacity: 1; }
 }
+
+/* Cache complètement la scrollbar horizontale */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE et Edge */
+  scrollbar-width: none;  /* Firefox */
+  overflow: -moz-scrollbars-none;  /* Firefox ancien */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
+/* Assure que la scrollbar est cachée partout */
+.overflow-x-auto::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+
+/* On-scroll animations utilities */
+.scroll-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.scroll-animate.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.scroll-animate-fade {
+  opacity: 0;
+  transition: opacity 0.7s ease-out;
+}
+.scroll-animate-fade.is-visible { opacity: 1; }
+
+.scroll-animate-slide-left {
+  opacity: 0;
+  transform: translateX(-50px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.scroll-animate-slide-left.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-animate-slide-right {
+  opacity: 0;
+  transform: translateX(50px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.scroll-animate-slide-right.is-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.scroll-animate-scale {
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.scroll-animate-scale.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Cascade delays */
+.scroll-animate-delay-100 { transition-delay: 100ms; }
+.scroll-animate-delay-200 { transition-delay: 200ms; }
+.scroll-animate-delay-300 { transition-delay: 300ms; }
+.scroll-animate-delay-400 { transition-delay: 400ms; }
+.scroll-animate-delay-500 { transition-delay: 500ms; }
