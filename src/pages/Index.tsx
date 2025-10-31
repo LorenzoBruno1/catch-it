@@ -28,6 +28,7 @@ import boosterPrismatic from "@/assets/booster/booster_evolution-prismatique.web
 import chasePrismatic1 from "@/assets/chase-card/prismatic-1.webp";
 import chasePrismatic2 from "@/assets/chase-card/prismatic-2.webp";
 import chasePrismatic3 from "@/assets/chase-card/prismatic-3.webp";
+import ecarlateVioletLogo from "@/assets/écarlate et violet.webp";
 
 const Index = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -381,7 +382,7 @@ const Index = () => {
                 <Sparkles className="h-8 w-8 md:h-10 md:w-10 text-secondary" />
                 Nos Produits
               </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-xl text-black max-w-2xl mx-auto">
                 Survolez les boosters pour découvrir les chase cards
               </p>
             </div>
@@ -436,15 +437,15 @@ const Index = () => {
                   
                   {/* Informations */}
                   <div className="p-6 space-y-4">
-                    <div className="min-h-[80px]">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent leading-tight">
-                        Booster 151
+                    <div className="min-h-[80px] flex flex-col items-start">
+                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2">
+                        151
                       </h3>
-                      <p className="text-sm text-muted-foreground mt-1">Collection complète Kanto</p>
+                      <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="h-16 w-auto object-contain opacity-60" />
                     </div>
                     
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-primary">19,99€</span>
+                      <span className="text-lg font-bold text-black">19,99€</span>
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">
                         En stock
                       </span>
@@ -490,14 +491,14 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="p-6 space-y-4">
-                    <div className="min-h-[80px]">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent leading-tight">
-                        Booster Destinées de Paldea
+                    <div className="min-h-[80px] flex flex-col items-start">
+                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2">
+                        Destinées de Paldea
                       </h3>
-                      <p className="text-sm text-muted-foreground mt-1">Écarlate et Violet</p>
+                      <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="h-6 w-auto object-contain" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-secondary">19,99€</span>
+                      <span className="text-3xl font-bold text-black">19,99€</span>
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">
                         En stock
                       </span>
@@ -543,14 +544,14 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="p-6 space-y-4">
-                    <div className="min-h-[80px]">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent leading-tight">
-                        Booster Étincelles Déferlantes
+                    <div className="min-h-[80px] flex flex-col items-start">
+                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2">
+                        Étincelles Déferlantes
                       </h3>
-                      <p className="text-sm text-muted-foreground mt-1">Écarlate et Violet</p>
+                      <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="h-6 w-auto object-contain" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-accent">19,99€</span>
+                      <span className="text-3xl font-bold text-black">19,99€</span>
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">
                         En stock
                       </span>
@@ -596,14 +597,14 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="p-6 space-y-4">
-                    <div className="min-h-[80px]">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent leading-tight">
+                    <div className="min-h-[80px] flex flex-col items-start">
+                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2">
                         Rivalités Destinées
                       </h3>
-                      <p className="text-sm text-muted-foreground mt-1">Écarlate et Violet</p>
+                      <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="h-6 w-auto object-contain" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-primary">19,99€</span>
+                      <span className="text-3xl font-bold text-black">19,99€</span>
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">
                         En stock
                       </span>
@@ -649,14 +650,14 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="p-6 space-y-4">
-                    <div className="min-h-[80px]">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent leading-tight">
+                    <div className="min-h-[80px] flex flex-col items-start">
+                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2">
                         Évolutions Prismatique
                       </h3>
-                      <p className="text-sm text-muted-foreground mt-1">Écarlate et Violet</p>
+                      <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="h-6 w-auto object-contain" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-secondary">19,99€</span>
+                      <span className="text-3xl font-bold text-black">19,99€</span>
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">
                         En stock
                       </span>
@@ -689,12 +690,12 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="p-6 space-y-4">
-                    <div className="min-h-[80px]">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent leading-tight">Booster 151</h3>
-                      <p className="text-sm text-muted-foreground mt-1">Collection complète Kanto</p>
+                    <div className="min-h-[80px] flex flex-col items-start">
+                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2">151</h3>
+                      <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="h-6 w-auto object-contain" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-primary">19,99€</span>
+                      <span className="text-3xl font-bold text-black">19,99€</span>
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
                     </div>
                   </div>
@@ -716,12 +717,12 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="p-6 space-y-4">
-                    <div className="min-h-[80px]">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent leading-tight">Booster Destinées de Paldea</h3>
-                      <p className="text-sm text-muted-foreground mt-1">Écarlate et Violet</p>
+                    <div className="min-h-[80px] flex flex-col items-start">
+                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2">Destinées de Paldea</h3>
+                      <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="h-6 w-auto object-contain" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-secondary">19,99€</span>
+                      <span className="text-3xl font-bold text-black">19,99€</span>
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
                     </div>
                   </div>
@@ -743,12 +744,12 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="p-6 space-y-4">
-                    <div className="min-h-[80px]">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-accent to-primary bg-clip-text text-transparent leading-tight">Booster Étincelles Déferlantes</h3>
-                      <p className="text-sm text-muted-foreground mt-1">Écarlate et Violet</p>
+                    <div className="min-h-[80px] flex flex-col items-start">
+                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2">Étincelles Déferlantes</h3>
+                      <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="h-6 w-auto object-contain" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-accent">19,99€</span>
+                      <span className="text-3xl font-bold text-black">19,99€</span>
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
                     </div>
                   </div>
@@ -770,12 +771,12 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="p-6 space-y-4">
-                    <div className="min-h-[80px]">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent leading-tight">Rivalités Destinées</h3>
-                      <p className="text-sm text-muted-foreground mt-1">Écarlate et Violet</p>
+                    <div className="min-h-[80px] flex flex-col items-start">
+                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2">Rivalités Destinées</h3>
+                      <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="h-6 w-auto object-contain" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-primary">19,99€</span>
+                      <span className="text-3xl font-bold text-black">19,99€</span>
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
                     </div>
                   </div>
@@ -797,12 +798,12 @@ const Index = () => {
                     </div>
                   </div>
                   <div className="p-6 space-y-4">
-                    <div className="min-h-[80px]">
-                      <h3 className="text-2xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent leading-tight">Évolutions Prismatique</h3>
-                      <p className="text-sm text-muted-foreground mt-1">Écarlate et Violet</p>
+                    <div className="min-h-[80px] flex flex-col items-start">
+                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2">Évolutions Prismatique</h3>
+                      <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="h-6 w-auto object-contain" />
                     </div>
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl font-bold text-secondary">19,99€</span>
+                      <span className="text-3xl font-bold text-black">19,99€</span>
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
                     </div>
                   </div>
