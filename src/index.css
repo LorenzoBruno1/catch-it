@@ -175,7 +175,7 @@ All colors MUST be HSL.
 
 /* Chrome gradient animé sur mot "Pokémon" */
 .gradient-chrome-text {
-  background: linear-gradient(90deg,#FF4D4D 0%,#4A7BFF 45%,#FFD84A 100%);
+  background: linear-gradient(90deg,#FF4D4D 0%,#4A7BFF 45%,#FF8C42 100%);
   background-size: 200% 100%;
   background-position: 0% 50%;
   -webkit-background-clip: text;
@@ -205,6 +205,7 @@ All colors MUST be HSL.
 .badge-glossy {
   position: relative;
   overflow: hidden;
+  animation: badge-shimmer 3s ease-in-out infinite;
 }
 .badge-glossy::after {
   content: '';
@@ -220,6 +221,10 @@ All colors MUST be HSL.
 @keyframes badge-gloss-move {
   0%,100% { left: -45%; opacity: 0.6; }
   50% { left: 60%; opacity: 1; }
+}
+@keyframes badge-shimmer {
+  0%, 100% { filter: brightness(1) drop-shadow(0 0 0 transparent); }
+  50% { filter: brightness(1.15) drop-shadow(0 0 8px rgba(255, 77, 77, 0.4)); }
 }
 
 /* Cache complètement la scrollbar horizontale */
@@ -298,3 +303,12 @@ All colors MUST be HSL.
 .scroll-animate-delay-300 { transition-delay: 300ms; }
 .scroll-animate-delay-400 { transition-delay: 400ms; }
 .scroll-animate-delay-500 { transition-delay: 500ms; }
+
+/* Animation pulse glow pour CTA principal */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(255, 59, 48, 0.3); }
+  50% { box-shadow: 0 4px 28px rgba(255, 59, 48, 0.5); }
+}
+.animate-pulse-glow {
+  animation: pulse-glow 8s ease-in-out infinite;
+}
