@@ -187,7 +187,7 @@ const Index = () => {
             <img 
               src={logo} 
               alt="Catch'it Logo" 
-              className="h-[56px] w-auto transition-all duration-300 hover:scale-[1.08] drop-shadow-[0_2px_12px_rgba(0,0,0,0.15)] hover:drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)]" 
+              className="h-[32px] w-auto transition-all duration-300 hover:scale-[1.08] drop-shadow-[0_2px_12px_rgba(0,0,0,0.15)] hover:drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)]" 
             />
           </div>
           <div className="flex items-center h-full justify-end">
@@ -200,7 +200,7 @@ const Index = () => {
           </div>
         </div>
         <a
-          href="mailto:contact@catcht.fr"
+          href="mailto:contact@catch-it.fr"
           aria-label="Contact"
           className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/40 bg-[rgba(255,255,255,0.4)] backdrop-blur-[10px] text-[#1a1a1a] opacity-85 shadow-[0_8px_24px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.08)] transition-all duration-300 hover:shadow-[0_12px_32px_rgba(0,0,0,0.16)] hover:scale-105 hover:opacity-100 hover:text-[#FF3B30] hover:bg-[rgba(255,255,255,0.5)]"
         >
