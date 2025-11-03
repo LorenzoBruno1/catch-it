@@ -79,7 +79,7 @@ const Index = () => {
 
   // Défilement automatique fluide et continu avec boucle infinie
   useEffect(() => {
-    const scrollSpeed = 0.8; // pixels par intervalle
+    const scrollSpeed = 1.5; // pixels par intervalle - vitesse modérée et fluide
     const carousel = carouselRef.current;
     
     if (!carousel) return;
@@ -87,34 +87,43 @@ const Index = () => {
     // Calculer la largeur réelle d'un set de cartes (on a 2 sets, donc la moitié du scrollWidth)
     const cardSetWidth = carousel.scrollWidth / 2;
     
-    let lastScrollTime = Date.now();
+    let isAutoScrolling = false;
+    let lastUserInteraction = 0;
     let userScrollTimeout: NodeJS.Timeout;
     
     // Détecter le scroll manuel de l'utilisateur (mobile touch scroll)
     const handleScroll = () => {
-      lastScrollTime = Date.now();
+      // Ignorer si c'est notre propre auto-scroll
+      if (isAutoScrolling) return;
+      
+      lastUserInteraction = Date.now();
       isDraggingRef.current = true;
       
       clearTimeout(userScrollTimeout);
       userScrollTimeout = setTimeout(() => {
         isDraggingRef.current = false;
-      }, 150); // Reprendre le scroll auto après 150ms d'inactivité
+      }, 200); // Reprendre le scroll auto après 200ms d'inactivité
     };
     
     carousel.addEventListener('scroll', handleScroll, { passive: true });
     
     const interval = setInterval(() => {
       if (carousel && !isDraggingRef.current) {
+        // Marquer qu'on fait un auto-scroll
+        isAutoScrolling = true;
+        
         // Incrémente le scroll
         carousel.scrollLeft += scrollSpeed;
         
         // Reset fluide quand on a scrollé la largeur d'un set complet
-        // On a 2 sets identiques (original + copie), donc on peut boucler
         if (carousel.scrollLeft >= cardSetWidth) {
-          // On revient au début en soustrayant exactement la largeur d'un set
-          // Visuellement invisible car le contenu est identique
           carousel.scrollLeft = carousel.scrollLeft - cardSetWidth;
         }
+        
+        // Petit délai avant de permettre la détection du prochain scroll utilisateur
+        setTimeout(() => {
+          isAutoScrolling = false;
+        }, 10);
       }
     }, 16); // ~60fps
 
@@ -174,12 +183,12 @@ const Index = () => {
       <div className="fixed top-0 left-0 z-50 w-full h-1 [background-size:200%_100%] bg-[linear-gradient(90deg,hsl(var(--primary)),hsl(var(--secondary)),hsl(var(--accent)),hsl(var(--primary)))] animate-marquee"></div>
       
       {/* Desktop Navigation */}
-      <div className="hidden lg:flex fixed top-6 left-1/2 z-50 -translate-x-1/2 items-center gap-4 xl:gap-8">
-        <div className="w-[600px] xl:w-[700px] grid grid-cols-3 rounded-[28px] border border-white/40 bg-[rgba(255,255,255,0.4)] shadow-[0_8px_24px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.08)] backdrop-blur-[10px] supports-[backdrop-filter]:bg-[rgba(255,255,255,0.4)] h-16 px-6 xl:px-12 relative">
+      <div className="hidden lg:flex fixed top-6 left-1/2 z-50 -translate-x-1/2 items-center gap-8">
+        <div className="w-[700px] grid grid-cols-3 rounded-[28px] border border-white/40 bg-[rgba(255,255,255,0.4)] shadow-[0_8px_24px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.08)] backdrop-blur-[10px] supports-[backdrop-filter]:bg-[rgba(255,255,255,0.4)] h-16 px-12 relative">
           <div className="flex items-center h-full justify-start">
             <button
               onClick={() => scrollToSection('machines')}
-              className="relative whitespace-nowrap text-sm xl:text-base font-semibold text-[#1a1a1a] opacity-85 hover:text-[#FF3B30] hover:opacity-100 transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#FF3B30] after:to-[#FF6B47] after:transition-all after:duration-300 hover:after:w-full tracking-wide hover:drop-shadow-[0_0_12px_rgba(255,59,48,0.5)]"
+              className="relative whitespace-nowrap text-base font-semibold text-[#1a1a1a] opacity-85 hover:text-[#FF3B30] hover:opacity-100 transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#FF3B30] after:to-[#FF6B47] after:transition-all after:duration-300 hover:after:w-full tracking-wide hover:drop-shadow-[0_0_12px_rgba(255,59,48,0.5)]"
             >
               Nos Machines
             </button>
@@ -188,13 +197,13 @@ const Index = () => {
             <img 
               src={logo} 
               alt="Catch'it Logo" 
-              className="h-[28px] xl:h-[32px] w-auto transition-all duration-300 hover:scale-[1.08] drop-shadow-[0_2px_12px_rgba(0,0,0,0.15)] hover:drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)]" 
+              className="h-[32px] w-auto transition-all duration-300 hover:scale-[1.08] drop-shadow-[0_2px_12px_rgba(0,0,0,0.15)] hover:drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)]" 
             />
           </div>
           <div className="flex items-center h-full justify-end">
             <button
               onClick={() => scrollToSection('disponibilites')}
-              className="relative whitespace-nowrap text-sm xl:text-base font-semibold text-[#1a1a1a] opacity-85 hover:text-[#FF3B30] hover:opacity-100 transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#FF3B30] after:to-[#FF6B47] after:transition-all after:duration-300 hover:after:w-full tracking-wide hover:drop-shadow-[0_0_12px_rgba(255,59,48,0.5)]"
+              className="relative whitespace-nowrap text-base font-semibold text-[#1a1a1a] opacity-85 hover:text-[#FF3B30] hover:opacity-100 transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#FF3B30] after:to-[#FF6B47] after:transition-all after:duration-300 hover:after:w-full tracking-wide hover:drop-shadow-[0_0_12px_rgba(255,59,48,0.5)]"
             >
               Nos Produits
             </button>
@@ -485,17 +494,21 @@ const Index = () => {
             <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-4">
             <div 
               ref={carouselRef}
-              className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 sm:pb-8 px-4 sm:px-0 scrollbar-hide cursor-grab active:cursor-grabbing select-none touch-pan-x"
-              style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch' }}
+              className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 sm:pb-8 px-4 sm:px-0 scrollbar-hide cursor-grab active:cursor-grabbing select-none will-change-scroll"
+              style={{ 
+                touchAction: 'pan-y pan-x', 
+                WebkitOverflowScrolling: 'touch',
+                scrollBehavior: 'auto'
+              }}
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseLeave}
             >
               {/* Booster Destinées de Paldea */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[280px] sm:w-[320px] md:w-[350px]">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={boosterPaldean} 
                       alt="Booster Destinées de Paldea" 
@@ -503,28 +516,28 @@ const Index = () => {
                     />
                     
                     {/* Overlay chase cards au hover */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
                         <img 
                           src={chasePaldean1} 
                           alt="Chase Card 1" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chasePaldean2} 
                           alt="Chase Card 2" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chasePaldean3} 
                           alt="Chase Card 3" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Destinées de Paldea
@@ -540,9 +553,9 @@ const Index = () => {
               </div>
 
               {/* Méga Évolution */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={boosterMegaEvolution} 
                       alt="Booster Méga Évolution" 
@@ -550,28 +563,28 @@ const Index = () => {
                     />
                     
                     {/* Overlay chase cards au hover */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
                         <img 
                           src={chaseMega1} 
                           alt="Chase Card 1" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseMega2} 
                           alt="Chase Card 2" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseMega3} 
                           alt="Chase Card 3" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={megaEvolutionLogo} alt="Méga Évolution" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Méga Évolution
@@ -587,9 +600,9 @@ const Index = () => {
               </div>
 
               {/* Série 151 */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={booster151} 
                       alt="Booster 151" 
@@ -597,28 +610,28 @@ const Index = () => {
                     />
                     
                     {/* Overlay chase cards au hover */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
                         <img 
                           src={chase151_1} 
                           alt="Chase Card 1" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chase151_2} 
                           alt="Chase Card 2" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chase151_3} 
                           alt="Chase Card 3" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         151
@@ -634,9 +647,9 @@ const Index = () => {
               </div>
 
               {/* Rivalités Destinées */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={boosterRivals} 
                       alt="Rivalités Destinées" 
@@ -644,28 +657,28 @@ const Index = () => {
                     />
                     
                     {/* Overlay chase cards au hover */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
                         <img 
                           src={chaseRivals1} 
                           alt="Chase Card 1" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseRivals2} 
                           alt="Chase Card 2" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseRivals3} 
                           alt="Chase Card 3" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Rivalités Destinées
@@ -681,9 +694,9 @@ const Index = () => {
               </div>
 
               {/* Flamme Blanche */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={boosterFlammeBlanche} 
                       alt="Booster Flamme Blanche" 
@@ -691,28 +704,28 @@ const Index = () => {
                     />
                     
                     {/* Overlay chase cards au hover */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
                         <img 
                           src={chaseWhite1} 
                           alt="Chase Card 1" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseWhite2} 
                           alt="Chase Card 2" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseWhite3} 
                           alt="Chase Card 3" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Flamme Blanche
@@ -728,9 +741,9 @@ const Index = () => {
               </div>
 
               {/* Poing de Fusion */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={boosterPoingFusion} 
                       alt="Booster Poing de Fusion" 
@@ -738,28 +751,28 @@ const Index = () => {
                     />
                     
                     {/* Overlay chase cards au hover */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
                         <img 
                           src={chaseFusion1} 
                           alt="Chase Card 1" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseFusion2} 
                           alt="Chase Card 2" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseFusion3} 
                           alt="Chase Card 3" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={epeeBouclierLogo} alt="Épée et Bouclier" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Poing de Fusion
@@ -775,9 +788,9 @@ const Index = () => {
               </div>
 
               {/* Étincelles Déferlantes */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={boosterSurging} 
                       alt="Booster Étincelles Déferlantes" 
@@ -785,28 +798,28 @@ const Index = () => {
                     />
                     
                     {/* Overlay chase cards au hover */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
                         <img 
                           src={chaseSurging1} 
                           alt="Chase Card 1" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseSurging2} 
                           alt="Chase Card 2" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseSurging3} 
                           alt="Chase Card 3" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Étincelles Déferlantes
@@ -822,9 +835,9 @@ const Index = () => {
               </div>
 
               {/* Zenith Supreme */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={boosterEpeeBouclier} 
                       alt="Booster Zenith Supreme" 
@@ -832,28 +845,28 @@ const Index = () => {
                     />
                     
                     {/* Overlay chase cards au hover */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
                         <img 
                           src={chaseZenith1} 
                           alt="Chase Card 1" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseZenith2} 
                           alt="Chase Card 2" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseZenith3} 
                           alt="Chase Card 3" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={epeeBouclierLogo} alt="Épée et Bouclier" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Zenith Supreme
@@ -869,9 +882,9 @@ const Index = () => {
               </div>
 
               {/* Évolutions Prismatique */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={boosterPrismatic} 
                       alt="Évolutions Prismatique" 
@@ -879,28 +892,28 @@ const Index = () => {
                     />
                     
                     {/* Overlay chase cards au hover */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
                         <img 
                           src={chasePrismatic1} 
                           alt="Chase Card 1" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chasePrismatic2} 
                           alt="Chase Card 2" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chasePrismatic3} 
                           alt="Chase Card 3" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Évolutions Prismatiques
@@ -916,9 +929,9 @@ const Index = () => {
               </div>
 
               {/* Flammes Fantasmagoriques */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={boosterFlammesFantasmagoriques} 
                       alt="Booster Flammes Fantasmagoriques" 
@@ -926,28 +939,28 @@ const Index = () => {
                     />
                     
                     {/* Overlay chase cards au hover */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
                         <img 
                           src={chaseFlammes1} 
                           alt="Chase Card 1" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseFlammes2} 
                           alt="Chase Card 2" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseFlammes3} 
                           alt="Chase Card 3" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={megaEvolutionLogo} alt="Méga Évolution" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Flammes Fantasmagoriques
@@ -963,9 +976,9 @@ const Index = () => {
               </div>
 
               {/* Foudre Noire */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={boosterFoudreNoire} 
                       alt="Booster Foudre Noire" 
@@ -973,28 +986,28 @@ const Index = () => {
                     />
                     
                     {/* Overlay chase cards au hover */}
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
                         <img 
                           src={chaseBlack1} 
                           alt="Chase Card 1" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseBlack2} 
                           alt="Chase Card 2" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                         <img 
                           src={chaseBlack3} 
                           alt="Chase Card 3" 
-                          className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
+                          className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10"
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Foudre Noire
@@ -1011,20 +1024,20 @@ const Index = () => {
 
               {/* DUPLICATAS pour boucle infinie (copie exacte des 11 cartes ci-dessus) */}
               {/* Booster Destinées de Paldea - Copie */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]" aria-hidden="true">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterPaldean} alt="Booster Destinées de Paldea" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
-                        <img src={chasePaldean1} alt="Chase Card 1" className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chasePaldean2} alt="Chase Card 2" className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chasePaldean3} alt="Chase Card 3" className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
+                        <img src={chasePaldean1} alt="Chase Card 1" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chasePaldean2} alt="Chase Card 2" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chasePaldean3} alt="Chase Card 3" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Destinées de Paldea</h3>
                     </div>
@@ -1036,20 +1049,20 @@ const Index = () => {
               </div>
 
               {/* Méga Évolution - Copie */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]" aria-hidden="true">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterMegaEvolution} alt="Booster Méga Évolution" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
-                        <img src={chaseMega1} alt="Chase Card 1" className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseMega2} alt="Chase Card 2" className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseMega3} alt="Chase Card 3" className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
+                        <img src={chaseMega1} alt="Chase Card 1" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseMega2} alt="Chase Card 2" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseMega3} alt="Chase Card 3" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={megaEvolutionLogo} alt="Méga Évolution" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Méga Évolution</h3>
                     </div>
@@ -1061,24 +1074,24 @@ const Index = () => {
               </div>
 
               {/* Série 151 - Copie */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]" aria-hidden="true">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
                       src={booster151} 
                       alt="Booster 151" 
                       className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
-                        <img src={chase151_1} alt="Chase Card 1" className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chase151_2} alt="Chase Card 2" className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chase151_3} alt="Chase Card 3" className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
+                        <img src={chase151_1} alt="Chase Card 1" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chase151_2} alt="Chase Card 2" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chase151_3} alt="Chase Card 3" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">151</h3>
                     </div>
@@ -1090,20 +1103,20 @@ const Index = () => {
               </div>
 
               {/* Rivalités Destinées - Copie */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]" aria-hidden="true">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterRivals} alt="Rivalités Destinées" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
-                        <img src={chaseRivals1} alt="Chase Card 1" className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseRivals2} alt="Chase Card 2" className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseRivals3} alt="Chase Card 3" className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
+                        <img src={chaseRivals1} alt="Chase Card 1" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseRivals2} alt="Chase Card 2" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseRivals3} alt="Chase Card 3" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Rivalités Destinées</h3>
                     </div>
@@ -1115,20 +1128,20 @@ const Index = () => {
               </div>
 
               {/* Flamme Blanche - Copie */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]" aria-hidden="true">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterFlammeBlanche} alt="Booster Flamme Blanche" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
-                        <img src={chaseWhite1} alt="Chase Card 1" className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseWhite2} alt="Chase Card 2" className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseWhite3} alt="Chase Card 3" className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
+                        <img src={chaseWhite1} alt="Chase Card 1" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseWhite2} alt="Chase Card 2" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseWhite3} alt="Chase Card 3" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Flamme Blanche</h3>
                     </div>
@@ -1140,20 +1153,20 @@ const Index = () => {
               </div>
 
               {/* Poing de Fusion - Copie */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]" aria-hidden="true">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterPoingFusion} alt="Booster Poing de Fusion" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
-                        <img src={chaseFusion1} alt="Chase Card 1" className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseFusion2} alt="Chase Card 2" className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseFusion3} alt="Chase Card 3" className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
+                        <img src={chaseFusion1} alt="Chase Card 1" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseFusion2} alt="Chase Card 2" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseFusion3} alt="Chase Card 3" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={epeeBouclierLogo} alt="Épée et Bouclier" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Poing de Fusion</h3>
                     </div>
@@ -1165,20 +1178,20 @@ const Index = () => {
               </div>
 
               {/* Étincelles Déferlantes - Copie */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]" aria-hidden="true">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterSurging} alt="Booster Étincelles Déferlantes" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
-                        <img src={chaseSurging1} alt="Chase Card 1" className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseSurging2} alt="Chase Card 2" className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseSurging3} alt="Chase Card 3" className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
+                        <img src={chaseSurging1} alt="Chase Card 1" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseSurging2} alt="Chase Card 2" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseSurging3} alt="Chase Card 3" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Étincelles Déferlantes</h3>
                     </div>
@@ -1190,20 +1203,20 @@ const Index = () => {
               </div>
 
               {/* Zenith Supreme - Copie */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]" aria-hidden="true">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterEpeeBouclier} alt="Booster Zenith Supreme" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
-                        <img src={chaseZenith1} alt="Chase Card 1" className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseZenith2} alt="Chase Card 2" className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseZenith3} alt="Chase Card 3" className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
+                        <img src={chaseZenith1} alt="Chase Card 1" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseZenith2} alt="Chase Card 2" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseZenith3} alt="Chase Card 3" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={epeeBouclierLogo} alt="Épée et Bouclier" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Zenith Supreme</h3>
                     </div>
@@ -1215,20 +1228,20 @@ const Index = () => {
               </div>
 
               {/* Évolutions Prismatique - Copie */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]" aria-hidden="true">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterPrismatic} alt="Évolutions Prismatique" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
-                        <img src={chasePrismatic1} alt="Chase Card 1" className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chasePrismatic2} alt="Chase Card 2" className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chasePrismatic3} alt="Chase Card 3" className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
+                        <img src={chasePrismatic1} alt="Chase Card 1" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chasePrismatic2} alt="Chase Card 2" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chasePrismatic3} alt="Chase Card 3" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Évolutions Prismatiques</h3>
                     </div>
@@ -1240,20 +1253,20 @@ const Index = () => {
               </div>
 
               {/* Flammes Fantasmagoriques - Copie */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]" aria-hidden="true">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterFlammesFantasmagoriques} alt="Booster Flammes Fantasmagoriques" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
-                        <img src={chaseFlammes1} alt="Chase Card 1" className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseFlammes2} alt="Chase Card 2" className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseFlammes3} alt="Chase Card 3" className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
+                        <img src={chaseFlammes1} alt="Chase Card 1" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseFlammes2} alt="Chase Card 2" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseFlammes3} alt="Chase Card 3" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={megaEvolutionLogo} alt="Méga Évolution" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Flammes Fantasmagoriques</h3>
                     </div>
@@ -1265,20 +1278,20 @@ const Index = () => {
               </div>
 
               {/* Foudre Noire - Copie */}
-              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
-                <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
-                  <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[300px] md:w-[320px]" aria-hidden="true">
+                <div className="relative min-h-[420px] sm:min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
+                  <div className="relative h-[280px] sm:h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterFoudreNoire} alt="Booster Foudre Noire" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
-                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-6 overflow-visible">
-                      <div className="flex gap-3 items-center justify-center animate-fade-in overflow-visible">
-                        <img src={chaseBlack1} alt="Chase Card 1" className="w-24 h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseBlack2} alt="Chase Card 2" className="w-24 h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
-                        <img src={chaseBlack3} alt="Chase Card 3" className="w-24 h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-3 p-3 sm:p-6 overflow-visible">
+                      <div className="flex gap-2 sm:gap-3 items-center justify-center animate-fade-in overflow-visible">
+                        <img src={chaseBlack1} alt="Chase Card 1" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform -rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseBlack2} alt="Chase Card 2" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform hover:scale-125 transition-all duration-300 hover:z-10" />
+                        <img src={chaseBlack3} alt="Chase Card 3" className="w-16 h-24 sm:w-24 sm:h-32 object-cover rounded-sm shadow-xl transform rotate-12 hover:rotate-0 hover:scale-125 transition-all duration-300 hover:z-10" />
                       </div>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
-                    <div className="min-h-[80px] flex flex-col items-start relative">
+                  <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                    <div className="min-h-[60px] sm:min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
                       <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Foudre Noire</h3>
                     </div>
@@ -1438,10 +1451,10 @@ const Index = () => {
             {/* Contact */}
             <div className="flex flex-col items-center gap-3 sm:gap-4">
               <h3 className="font-outfit font-bold text-base sm:text-lg">Contact</h3>
-              <div className="space-y-2 sm:space-y-3 w-full max-w-xs flex flex-col items-center">
+              <div className="space-y-2 sm:space-y-3 w-full max-w-xs flex flex-col items-center md:items-start">
                 <a 
                   href="mailto:contact@catch-it.fr" 
-                  className="flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors group w-full"
+                  className="flex items-center justify-center md:justify-start gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors group w-full"
                 >
                   <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
                     <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
@@ -1452,7 +1465,7 @@ const Index = () => {
                   href="https://instagram.com/catchit.fr" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-secondary transition-colors group w-full"
+                  className="flex items-center justify-center md:justify-start gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-secondary transition-colors group w-full"
                 >
                   <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
                     <Instagram className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-secondary" />
@@ -1465,10 +1478,10 @@ const Index = () => {
             {/* Téléphone */}
             <div className="flex flex-col items-center gap-3 sm:gap-4">
               <h3 className="font-outfit font-bold text-base sm:text-lg">Appelez-nous</h3>
-              <div className="space-y-2 sm:space-y-3 w-full max-w-xs flex flex-col items-center">
+              <div className="space-y-2 sm:space-y-3 w-full max-w-xs flex flex-col items-center md:items-start">
                 <a 
                   href="tel:0662683668" 
-                  className="flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-accent transition-colors group w-full"
+                  className="flex items-center justify-center md:justify-start gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-accent transition-colors group w-full"
                 >
                   <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
                     <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" />
@@ -1477,7 +1490,7 @@ const Index = () => {
                 </a>
                 <a 
                   href="tel:0783880177" 
-                  className="flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-accent transition-colors group w-full"
+                  className="flex items-center justify-center md:justify-start gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-accent transition-colors group w-full"
                 >
                   <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
                     <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" />
