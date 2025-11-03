@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Package, Mail, Phone, Sparkles, ShoppingCart, CreditCard, Gift, Shield, Zap, Headphones, CheckCircle2, AlertCircle, Star, Quote, Instagram } from "lucide-react";
+import { MapPin, Package, Mail, Phone, Sparkles, ShoppingCart, CreditCard, Gift, Shield, Zap, Headphones, CheckCircle2, AlertCircle, Star, Quote, Instagram, Menu, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { ScrollAnimateWrapper } from "@/components/ScrollAnimateWrapper";
@@ -59,6 +59,7 @@ import megaEvolutionLogo from "@/assets/logo_ME1.webp";
 const Index = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const isDraggingRef = useRef(false);
@@ -68,6 +69,7 @@ const Index = () => {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: "smooth" });
+    setIsMobileMenuOpen(false);
   };
 
   // Sync isDragging state avec la ref
@@ -173,12 +175,14 @@ const Index = () => {
       {/* Header/Navigation */}
       {/* Animated multicolor bar at top */}
       <div className="fixed top-0 left-0 z-50 w-full h-1 [background-size:200%_100%] bg-[linear-gradient(90deg,hsl(var(--primary)),hsl(var(--secondary)),hsl(var(--accent)),hsl(var(--primary)))] animate-marquee"></div>
-      <div className="fixed top-6 left-1/2 z-50 -translate-x-1/2 flex items-center gap-8">
-        <div className="w-[700px] min-w-[350px] max-w-3xl grid grid-cols-3 rounded-[28px] border border-white/40 bg-[rgba(255,255,255,0.4)] shadow-[0_8px_24px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.08)] backdrop-blur-[10px] supports-[backdrop-filter]:bg-[rgba(255,255,255,0.4)] h-16 px-12 relative">
+      
+      {/* Desktop Navigation */}
+      <div className="hidden lg:flex fixed top-6 left-1/2 z-50 -translate-x-1/2 items-center gap-4 xl:gap-8">
+        <div className="w-[600px] xl:w-[700px] grid grid-cols-3 rounded-[28px] border border-white/40 bg-[rgba(255,255,255,0.4)] shadow-[0_8px_24px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.08)] backdrop-blur-[10px] supports-[backdrop-filter]:bg-[rgba(255,255,255,0.4)] h-16 px-6 xl:px-12 relative">
           <div className="flex items-center h-full justify-start">
             <button
               onClick={() => scrollToSection('machines')}
-              className="relative whitespace-nowrap text-base font-semibold text-[#1a1a1a] opacity-85 hover:text-[#FF3B30] hover:opacity-100 transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#FF3B30] after:to-[#FF6B47] after:transition-all after:duration-300 hover:after:w-full tracking-wide hover:drop-shadow-[0_0_12px_rgba(255,59,48,0.5)]"
+              className="relative whitespace-nowrap text-sm xl:text-base font-semibold text-[#1a1a1a] opacity-85 hover:text-[#FF3B30] hover:opacity-100 transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#FF3B30] after:to-[#FF6B47] after:transition-all after:duration-300 hover:after:w-full tracking-wide hover:drop-shadow-[0_0_12px_rgba(255,59,48,0.5)]"
             >
               Nos Machines
             </button>
@@ -187,13 +191,13 @@ const Index = () => {
             <img 
               src={logo} 
               alt="Catch'it Logo" 
-              className="h-[32px] w-auto transition-all duration-300 hover:scale-[1.08] drop-shadow-[0_2px_12px_rgba(0,0,0,0.15)] hover:drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)]" 
+              className="h-[28px] xl:h-[32px] w-auto transition-all duration-300 hover:scale-[1.08] drop-shadow-[0_2px_12px_rgba(0,0,0,0.15)] hover:drop-shadow-[0_4px_20px_rgba(0,0,0,0.25)]" 
             />
           </div>
           <div className="flex items-center h-full justify-end">
             <button
               onClick={() => scrollToSection('disponibilites')}
-              className="relative whitespace-nowrap text-base font-semibold text-[#1a1a1a] opacity-85 hover:text-[#FF3B30] hover:opacity-100 transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#FF3B30] after:to-[#FF6B47] after:transition-all after:duration-300 hover:after:w-full tracking-wide hover:drop-shadow-[0_0_12px_rgba(255,59,48,0.5)]"
+              className="relative whitespace-nowrap text-sm xl:text-base font-semibold text-[#1a1a1a] opacity-85 hover:text-[#FF3B30] hover:opacity-100 transition-all duration-300 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-gradient-to-r after:from-[#FF3B30] after:to-[#FF6B47] after:transition-all after:duration-300 hover:after:w-full tracking-wide hover:drop-shadow-[0_0_12px_rgba(255,59,48,0.5)]"
             >
               Nos Produits
             </button>
@@ -208,60 +212,109 @@ const Index = () => {
         </a>
       </div>
 
+      {/* Mobile/Tablet Navigation */}
+      <div className="lg:hidden fixed top-4 left-0 right-0 z-50 px-4">
+        <div className="flex items-center justify-between rounded-[20px] border border-white/40 bg-[rgba(255,255,255,0.4)] shadow-[0_8px_24px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.08)] backdrop-blur-[10px] h-14 px-4">
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+            aria-label="Menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6 text-[#1a1a1a]" />
+            ) : (
+              <Menu className="h-6 w-6 text-[#1a1a1a]" />
+            )}
+          </button>
+          <img 
+            src={logo} 
+            alt="Catch'it Logo" 
+            className="h-[24px] w-auto drop-shadow-[0_2px_12px_rgba(0,0,0,0.15)]" 
+          />
+          <a
+            href="mailto:contact@catch-it.fr"
+            aria-label="Contact"
+            className="p-2 rounded-lg hover:bg-white/20 transition-colors"
+          >
+            <Mail className="h-5 w-5 text-[#1a1a1a]" />
+          </a>
+        </div>
+
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <div className="fixed inset-0 top-[72px] bg-black/20 backdrop-blur-sm" onClick={() => setIsMobileMenuOpen(false)}>
+            <div className="bg-white/95 backdrop-blur-md rounded-b-[20px] shadow-[0_8px_24px_rgba(0,0,0,0.12)] mx-4 p-6 space-y-4" onClick={(e) => e.stopPropagation()}>
+              <button
+                onClick={() => scrollToSection('machines')}
+                className="w-full text-left px-4 py-3 text-base font-semibold text-[#1a1a1a] hover:text-[#FF3B30] hover:bg-[#FF3B30]/5 rounded-lg transition-all duration-300"
+              >
+                Nos Machines
+              </button>
+              <button
+                onClick={() => scrollToSection('disponibilites')}
+                className="w-full text-left px-4 py-3 text-base font-semibold text-[#1a1a1a] hover:text-[#FF3B30] hover:bg-[#FF3B30]/5 rounded-lg transition-all duration-300"
+              >
+                Nos Produits
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Hero Section - Immersive Branding */}
       <section
-        className="relative min-h-[700px] flex items-center justify-center overflow-hidden py-12 md:py-0 animate-fade-in"
+        className="relative min-h-[600px] sm:min-h-[650px] md:min-h-[700px] flex items-center justify-center overflow-hidden pt-20 pb-12 sm:pt-24 md:pt-28 lg:py-0 animate-fade-in"
         style={{ minHeight: '85vh', maxHeight: '850px' }}
       >
         {/* Main animated background gradient, subtle animation */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#FFDEE9] via-[#B5C6E0] to-[#6699FF] hero-bg-animate"></div>
         {/* Decorative blobs / glows for poké ambiance */}
-        <div className="absolute top-14 left-1/4 md:left-[24%] w-60 h-60 bg-[#ff4d4d44] rounded-full blur-[110px] animate-drift-slow"></div>
-        <div className="absolute bottom-24 right-10 w-[19rem] h-[19rem] bg-[#FFD84A22] rounded-full blur-[160px] animate-drift-slow" style={{ animationDelay: '-3s' }}></div>
+        <div className="absolute top-14 left-1/4 md:left-[24%] w-40 h-40 sm:w-60 sm:h-60 bg-[#ff4d4d44] rounded-full blur-[80px] sm:blur-[110px] animate-drift-slow"></div>
+        <div className="absolute bottom-24 right-10 w-48 h-48 sm:w-[19rem] sm:h-[19rem] bg-[#FFD84A22] rounded-full blur-[120px] sm:blur-[160px] animate-drift-slow" style={{ animationDelay: '-3s' }}></div>
         <div className="absolute top-[55%] left-1/2 w-16 h-16 bg-[#4A7BFF33] rounded-full blur-2xl animate-drift" style={{ animationDuration: '8s', animationDelay: '-1s' }}></div>
         {/* Subtle highlight behind text for readability */}
         <div className="absolute left-0 right-0 mx-auto top-1/2 -translate-y-1/2 w-[700px] max-w-full h-[350px] bg-white/30 blur-3xl z-10 md:block hidden pointer-events-none" />
-        <div className="container mx-auto px-4 relative z-20 flex flex-col md:flex-row items-center justify-between gap-12 md:gap-20 min-h-[650px]">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-20 flex flex-col lg:flex-row items-center justify-between gap-8 sm:gap-12 lg:gap-20 min-h-[500px] sm:min-h-[650px]">
           {/* Bloc texte - centré verticalement avec la machine à droite */}
-          <div className="flex-1 min-w-[320px] flex flex-col items-center md:items-start justify-center md:pl-10 md:pr-8">
-            <div className="badge-glossy inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-[2px] border border-primary/20 text-primary text-sm font-semibold mb-2 mt-2 md:mb-4 md:mt-0 select-none animate-fade-in" style={{ animationDelay: '100ms' }}>
-              <Sparkles className="h-4 w-4" />
+          <div className="flex-1 w-full flex flex-col items-center lg:items-start justify-center lg:pl-10 lg:pr-8">
+            <div className="badge-glossy inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary/10 backdrop-blur-[2px] border border-primary/20 text-primary text-xs sm:text-sm font-semibold mb-3 sm:mb-4 select-none animate-fade-in" style={{ animationDelay: '100ms' }}>
+              <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Nouveau concept en France
             </div>
             <h1
-              className="hero-halo font-outfit font-extrabold text-[2rem] md:text-[2.8rem] lg:text-[3.3rem] tracking-tight text-center md:text-left pb-2 max-w-[750px] animate-fade-in"
+              className="hero-halo font-outfit font-extrabold text-[1.75rem] sm:text-[2rem] md:text-[2.5rem] lg:text-[2.8rem] xl:text-[3.3rem] tracking-tight text-center lg:text-left pb-2 max-w-[750px] animate-fade-in px-4 sm:px-0"
               style={{lineHeight: '1.4', animationDelay: '200ms'}}
             >
               Attrapez vos cartes<br />
               <span className="gradient-chrome-text">Pokémon</span>, à tout moment.
             </h1>
-            <p className="font-manrope text-lg md:text-xl opacity-90 text-center md:text-left max-w-[600px] mb-8 mt-3 md:mb-9 md:mt-5 animate-fade-in" style={{lineHeight: '1.8', animationDelay: '300ms'}}>
+            <p className="font-manrope text-base sm:text-lg md:text-xl opacity-90 text-center lg:text-left max-w-[600px] mb-6 sm:mb-8 mt-3 sm:mt-4 md:mt-5 animate-fade-in px-4 sm:px-0" style={{lineHeight: '1.8', animationDelay: '300ms'}}>
               Découvrez nos distributeurs automatiques Pokémon : une nouvelle façon d'obtenir vos boosters, accessibles facilement dans nos premiers points de vente en France.
             </p>
             {/* Buttons centrés sous le texte */}
-            <div className="flex flex-col md:flex-row gap-4 md:gap-7 w-full md:w-auto items-center justify-center md:justify-start animate-fade-in" style={{ animationDelay: '400ms' }}>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-7 w-full sm:w-auto items-center justify-center lg:justify-start animate-fade-in px-4 sm:px-0" style={{ animationDelay: '400ms' }}>
               <Button 
                 onClick={() => scrollToSection("machines")} 
                 size="lg" 
-                className="gap-2 px-7 py-4 rounded-full font-manrope font-semibold text-base bg-gradient-to-r from-[#FF3B30] to-[#FFB347] hover:from-[#FF3B30] hover:to-[#FFB347] shadow-[0_4px_20px_rgba(255,59,48,0.3)] hover:shadow-[0_8px_32px_rgba(255,59,48,0.4)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-200 animate-pulse-glow"
+                className="gap-2 px-6 sm:px-7 py-3 sm:py-4 rounded-full font-manrope font-semibold text-sm sm:text-base bg-gradient-to-r from-[#FF3B30] to-[#FFB347] hover:from-[#FF3B30] hover:to-[#FFB347] shadow-[0_4px_20px_rgba(255,59,48,0.3)] hover:shadow-[0_8px_32px_rgba(255,59,48,0.4)] hover:-translate-y-0.5 active:scale-[0.97] transition-all duration-200 animate-pulse-glow w-full sm:w-auto"
               >
                 Découvrir nos machines
-                <Package className="h-5.5 w-5.5" />
+                <Package className="h-5 w-5 sm:h-5.5 sm:w-5.5" />
               </Button>
               <Button 
                 onClick={() => scrollToSection("disponibilites")} 
                 variant="outline" 
                 size="lg" 
-                className="gap-2 px-7 py-4 rounded-full font-manrope font-semibold text-base border-2 bg-transparent hover:bg-[rgba(100,100,255,0.05)] border-[#6B7BFF] hover:border-[#8B9BFF] hover:shadow-[0_0_20px_rgba(107,123,255,0.3)] active:scale-[0.97] transition-all duration-200"
+                className="gap-2 px-6 sm:px-7 py-3 sm:py-4 rounded-full font-manrope font-semibold text-sm sm:text-base border-2 bg-transparent hover:bg-[rgba(100,100,255,0.05)] border-[#6B7BFF] hover:border-[#8B9BFF] hover:shadow-[0_0_20px_rgba(107,123,255,0.3)] active:scale-[0.97] transition-all duration-200 w-full sm:w-auto"
               >
                 Voir les boosters
               </Button>
             </div>
           </div>
           {/* Machine - alignée verticalement au center sur grand écran, toujours visible mais jamais plus imposante que le texte visuellement */}
-          <div className="flex-1 w-full flex items-center justify-center pt-12 pb-6 md:py-0 animate-fade-in" style={{ animationDelay: '250ms' }}>
-            <div className="relative md:w-[480px] w-[95vw] max-w-[380px] md:max-w-[480px]">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-secondary/30 to-accent/20 rounded-3xl blur-[65px]"></div>
+          <div className="flex-1 w-full flex items-center justify-center pt-6 pb-6 lg:py-0 animate-fade-in" style={{ animationDelay: '250ms' }}>
+            <div className="relative w-[85vw] max-w-[320px] sm:max-w-[380px] md:max-w-[420px] lg:w-[480px] lg:max-w-[480px]">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-secondary/30 to-accent/20 rounded-3xl blur-[50px] sm:blur-[65px]"></div>
               <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl"></div>
               {/* Image loading skeleton */}
               <div className="relative">
@@ -280,56 +333,56 @@ const Index = () => {
       </section>
 
       {/* Section Nos Machines */}
-      <section id="machines" className="container mx-auto px-4 pt-16 pb-24">
+      <section id="machines" className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12 sm:pt-16 pb-16 sm:pb-24">
         <ScrollAnimateWrapper>
-          <div className="text-center mb-16">
-            <h2 className="hero-halo font-outfit font-extrabold text-[2.2rem] md:text-[2.8rem] lg:text-[3.2rem] tracking-tight mb-4 inline-flex items-center gap-3 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-1 after:w-0 after:bg-gradient-to-r after:from-primary after:via-secondary after:to-accent after:transition-all after:duration-500 hover:after:w-11/12 after:rounded-full after:[background-size:200%_100%] after:animate-marquee-slow">
-              <Package className="h-8 w-8 md:h-10 md:w-10 text-primary" />
+          <div className="text-center mb-12 sm:mb-16">
+            <h2 className="hero-halo font-outfit font-extrabold text-[1.75rem] sm:text-[2.2rem] md:text-[2.8rem] lg:text-[3.2rem] tracking-tight mb-3 sm:mb-4 inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-3 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-1 after:w-0 after:bg-gradient-to-r after:from-primary after:via-secondary after:to-accent after:transition-all after:duration-500 hover:after:w-11/12 after:rounded-full after:[background-size:200%_100%] after:animate-marquee-slow">
+              <Package className="h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 text-primary" />
               Nos Machines
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
               Des distributeurs nouvelle génération pour une expérience collector unique
             </p>
           </div>
         </ScrollAnimateWrapper>
         
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
+        <div className="grid md:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16">
           <ScrollAnimateWrapper animationType="slide-left">
             <Card className="h-full border-2 hover:border-primary/50 transition-all duration-300 hover:shadow-lg group flex flex-col">
             <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-2xl">
-                <div className="p-2 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
-                  <Package className="h-6 w-6 text-primary" />
+              <CardTitle className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl md:text-2xl">
+                <div className="p-1.5 sm:p-2 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
+                  <Package className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                 </div>
                 Comment ça marche ?
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6 flex-grow">
-              <div className="flex gap-4 group/item hover:translate-x-2 transition-transform duration-300">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-lg">
-                  <ShoppingCart className="h-6 w-6" />
+            <CardContent className="space-y-4 sm:space-y-6 flex-grow">
+              <div className="flex gap-3 sm:gap-4 group/item hover:translate-x-1 sm:hover:translate-x-2 transition-transform duration-300">
+                <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/70 text-primary-foreground shadow-lg">
+                  <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
                 <div>
-                  <p className="font-semibold mb-1">Choisissez votre série</p>
-                  <p className="text-sm text-muted-foreground">Navigation intuitive sur écran tactile HD</p>
+                  <p className="font-semibold mb-1 text-sm sm:text-base">Choisissez votre série</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Navigation intuitive sur écran tactile HD</p>
                 </div>
               </div>
-              <div className="flex gap-4 group/item hover:translate-x-2 transition-transform duration-300">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary to-secondary/70 text-primary-foreground shadow-lg">
-                  <CreditCard className="h-6 w-6" />
+              <div className="flex gap-3 sm:gap-4 group/item hover:translate-x-1 sm:hover:translate-x-2 transition-transform duration-300">
+                <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary to-secondary/70 text-primary-foreground shadow-lg">
+                  <CreditCard className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
                 <div>
-                  <p className="font-semibold mb-1">Payez en toute sécurité</p>
-                  <p className="text-sm text-muted-foreground">CB sans contact ou espèces acceptées</p>
+                  <p className="font-semibold mb-1 text-sm sm:text-base">Payez en toute sécurité</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">CB sans contact ou espèces acceptées</p>
                 </div>
               </div>
-              <div className="flex gap-4 group/item hover:translate-x-2 transition-transform duration-300">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-accent/70 text-accent-foreground shadow-lg">
-                  <Gift className="h-6 w-6" />
+              <div className="flex gap-3 sm:gap-4 group/item hover:translate-x-1 sm:hover:translate-x-2 transition-transform duration-300">
+                <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-accent/70 text-accent-foreground shadow-lg">
+                  <Gift className="h-5 w-5 sm:h-6 sm:w-6" />
                 </div>
                 <div>
-                  <p className="font-semibold mb-1">Récupérez votre booster</p>
-                  <p className="text-sm text-muted-foreground">Découvrez vos cartes immédiatement !</p>
+                  <p className="font-semibold mb-1 text-sm sm:text-base">Récupérez votre booster</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Découvrez vos cartes immédiatement !</p>
                 </div>
               </div>
             </CardContent>
@@ -339,24 +392,24 @@ const Index = () => {
           <ScrollAnimateWrapper animationType="slide-right">
             <Card className="h-full border-2 hover:border-secondary/50 transition-all duration-300 hover:shadow-lg group flex flex-col">
             <CardHeader>
-              <CardTitle className="flex items-center gap-3 text-2xl">
-                <div className="p-2 bg-secondary/10 rounded-xl group-hover:bg-secondary/20 transition-colors">
-                  <MapPin className="h-6 w-6 text-secondary" />
+              <CardTitle className="flex items-center gap-2 sm:gap-3 text-lg sm:text-xl md:text-2xl">
+                <div className="p-1.5 sm:p-2 bg-secondary/10 rounded-xl group-hover:bg-secondary/20 transition-colors">
+                  <MapPin className="h-5 w-5 sm:h-6 sm:w-6 text-secondary" />
                 </div>
                 Où nous trouver ?
               </CardTitle>
             </CardHeader>
-            <CardContent className="flex-grow flex items-center justify-center">
-              <div className="text-center space-y-4 w-full">
+            <CardContent className="flex-grow flex items-center justify-center py-8">
+              <div className="text-center space-y-3 sm:space-y-4 w-full px-4">
                 <div className="flex justify-center">
-                  <div className="p-4 bg-muted/50 rounded-full">
-                    <AlertCircle className="h-12 w-12 text-muted-foreground" />
+                  <div className="p-3 sm:p-4 bg-muted/50 rounded-full">
+                    <AlertCircle className="h-10 w-10 sm:h-12 sm:w-12 text-muted-foreground" />
                   </div>
                 </div>
-                <p className="text-lg font-semibold text-muted-foreground">
+                <p className="text-base sm:text-lg font-semibold text-muted-foreground">
                   Pas de distributeur pour le moment
                 </p>
-                <p className="text-sm text-muted-foreground/80">
+                <p className="text-xs sm:text-sm text-muted-foreground/80">
                   Revenez bientôt pour découvrir nos emplacements !
                 </p>
               </div>
@@ -367,64 +420,65 @@ const Index = () => {
 
         {/* Éléments de confiance */}
         <ScrollAnimateWrapper animationType="scale">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6">
-            <div className="flex flex-col items-center text-center gap-2 p-4 rounded-lg hover:bg-muted/50 transition-colors group">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                <Shield className="h-5 w-5" />
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 md:gap-6">
+            <div className="flex flex-col items-center text-center gap-1.5 sm:gap-2 p-3 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors group">
+              <div className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                <Shield className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <p className="font-semibold text-sm">Paiement sécurisé</p>
-              <p className="text-xs text-muted-foreground">CB sans contact et espèces</p>
+              <p className="font-semibold text-xs sm:text-sm">Paiement sécurisé</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">CB sans contact et espèces</p>
             </div>
-            <div className="flex flex-col items-center text-center gap-2 p-4 rounded-lg hover:bg-muted/50 transition-colors group">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors">
-                <Zap className="h-5 w-5" />
+            <div className="flex flex-col items-center text-center gap-1.5 sm:gap-2 p-3 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors group">
+              <div className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors">
+                <Zap className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <p className="font-semibold text-sm">Interface tactile HD</p>
-              <p className="text-xs text-muted-foreground">Navigation intuitive et colorée</p>
+              <p className="font-semibold text-xs sm:text-sm">Interface tactile HD</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Navigation intuitive et colorée</p>
             </div>
-            <div className="flex flex-col items-center text-center gap-2 p-4 rounded-lg hover:bg-muted/50 transition-colors group">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
-                <Package className="h-5 w-5" />
+            <div className="flex flex-col items-center text-center gap-1.5 sm:gap-2 p-3 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors group">
+              <div className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
+                <Package className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <p className="font-semibold text-sm">Stock en temps réel</p>
-              <p className="text-xs text-muted-foreground">Disponibilité actualisée</p>
+              <p className="font-semibold text-xs sm:text-sm">Stock en temps réel</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Disponibilité actualisée</p>
             </div>
-            <div className="flex flex-col items-center text-center gap-2 p-4 rounded-lg hover:bg-muted/50 transition-colors group">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                <Sparkles className="h-5 w-5" />
+            <div className="flex flex-col items-center text-center gap-1.5 sm:gap-2 p-3 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors group">
+              <div className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <p className="font-semibold text-sm">Service 24h/24</p>
-              <p className="text-xs text-muted-foreground">Accessible à toute heure</p>
+              <p className="font-semibold text-xs sm:text-sm">Service 24h/24</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Accessible à toute heure</p>
             </div>
-            <div className="flex flex-col items-center text-center gap-2 p-4 rounded-lg hover:bg-muted/50 transition-colors group">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors">
-                <CheckCircle2 className="h-5 w-5" />
+            <div className="flex flex-col items-center text-center gap-1.5 sm:gap-2 p-3 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors group">
+              <div className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg bg-secondary/10 text-secondary group-hover:bg-secondary group-hover:text-secondary-foreground transition-colors">
+                <CheckCircle2 className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <p className="font-semibold text-sm">Produits officiels</p>
-              <p className="text-xs text-muted-foreground">100% authentiques garantis</p>
+              <p className="font-semibold text-xs sm:text-sm">Produits officiels</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">100% authentiques garantis</p>
             </div>
-            <div className="flex flex-col items-center text-center gap-2 p-4 rounded-lg hover:bg-muted/50 transition-colors group">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
-                <Headphones className="h-5 w-5" />
+            <div className="flex flex-col items-center text-center gap-1.5 sm:gap-2 p-3 sm:p-4 rounded-lg hover:bg-muted/50 transition-colors group">
+              <div className="flex h-8 w-8 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent group-hover:bg-accent group-hover:text-accent-foreground transition-colors">
+                <Headphones className="h-4 w-4 sm:h-5 sm:w-5" />
               </div>
-              <p className="font-semibold text-sm">Maintenance régulière</p>
-              <p className="text-xs text-muted-foreground">Contrôle qualité permanent</p>
+              <p className="font-semibold text-xs sm:text-sm">Maintenance régulière</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground hidden sm:block">Contrôle qualité permanent</p>
             </div>
           </div>
         </ScrollAnimateWrapper>
       </section>
 
       {/* Section Disponibilités */}
-      <section id="disponibilites" className="bg-gradient-to-br from-muted/30 to-muted/60 pt-16 pb-24 overflow-hidden">
-        <div className="container mx-auto px-4">
+      <section id="disponibilites" className="bg-gradient-to-br from-muted/30 to-muted/60 pt-12 sm:pt-16 pb-16 sm:pb-24 overflow-hidden">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <ScrollAnimateWrapper>
-            <div className="text-center mb-16">
-              <h2 className="hero-halo font-outfit font-extrabold text-[2.2rem] md:text-[2.8rem] lg:text-[3.2rem] tracking-tight mb-4 inline-flex items-center gap-3 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-1 after:w-0 after:bg-gradient-to-r after:from-primary after:via-secondary after:to-accent after:transition-all after:duration-500 hover:after:w-11/12 after:rounded-full after:[background-size:200%_100%] after:animate-marquee-slow">
-                <Sparkles className="h-8 w-8 md:h-10 md:w-10 text-secondary" />
+            <div className="text-center mb-12 sm:mb-16">
+              <h2 className="hero-halo font-outfit font-extrabold text-[1.75rem] sm:text-[2.2rem] md:text-[2.8rem] lg:text-[3.2rem] tracking-tight mb-3 sm:mb-4 inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-3 relative after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:h-1 after:w-0 after:bg-gradient-to-r after:from-primary after:via-secondary after:to-accent after:transition-all after:duration-500 hover:after:w-11/12 after:rounded-full after:[background-size:200%_100%] after:animate-marquee-slow">
+                <Sparkles className="h-7 w-7 sm:h-8 sm:w-8 md:h-10 md:w-10 text-secondary" />
                 Nos Produits
               </h2>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Survolez les boosters pour découvrir les chase cards
+              <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto px-4">
+                <span className="hidden sm:inline">Survolez les boosters pour découvrir les chase cards</span>
+                <span className="sm:hidden">Découvrez nos boosters disponibles</span>
               </p>
             </div>
           </ScrollAnimateWrapper>
@@ -434,7 +488,7 @@ const Index = () => {
             <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-4">
             <div 
               ref={carouselRef}
-              className="flex gap-6 overflow-x-auto pb-8 px-0 scrollbar-hide cursor-grab active:cursor-grabbing select-none"
+              className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 sm:pb-8 px-4 sm:px-0 scrollbar-hide cursor-grab active:cursor-grabbing select-none"
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
@@ -444,7 +498,7 @@ const Index = () => {
               onTouchEnd={handleTouchEnd}
             >
               {/* Booster Destinées de Paldea */}
-              <div className="group relative flex-shrink-0 w-[350px]">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[280px] sm:w-[320px] md:w-[350px]">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -477,7 +531,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Destinées de Paldea
                       </h3>
                     </div>
@@ -491,7 +545,7 @@ const Index = () => {
               </div>
 
               {/* Méga Évolution */}
-              <div className="group relative flex-shrink-0 w-[350px]">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -524,7 +578,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={megaEvolutionLogo} alt="Méga Évolution" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Méga Évolution
                       </h3>
                     </div>
@@ -538,7 +592,7 @@ const Index = () => {
               </div>
 
               {/* Série 151 */}
-              <div className="group relative flex-shrink-0 w-[350px]">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -571,7 +625,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         151
                       </h3>
                     </div>
@@ -585,7 +639,7 @@ const Index = () => {
               </div>
 
               {/* Rivalités Destinées */}
-              <div className="group relative flex-shrink-0 w-[350px]">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -618,7 +672,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Rivalités Destinées
                       </h3>
                     </div>
@@ -632,7 +686,7 @@ const Index = () => {
               </div>
 
               {/* Flamme Blanche */}
-              <div className="group relative flex-shrink-0 w-[350px]">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -665,7 +719,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Flamme Blanche
                       </h3>
                     </div>
@@ -679,7 +733,7 @@ const Index = () => {
               </div>
 
               {/* Poing de Fusion */}
-              <div className="group relative flex-shrink-0 w-[350px]">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -712,7 +766,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={epeeBouclierLogo} alt="Épée et Bouclier" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Poing de Fusion
                       </h3>
                     </div>
@@ -726,7 +780,7 @@ const Index = () => {
               </div>
 
               {/* Étincelles Déferlantes */}
-              <div className="group relative flex-shrink-0 w-[350px]">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -759,7 +813,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Étincelles Déferlantes
                       </h3>
                     </div>
@@ -773,7 +827,7 @@ const Index = () => {
               </div>
 
               {/* Zenith Supreme */}
-              <div className="group relative flex-shrink-0 w-[350px]">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -806,7 +860,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={epeeBouclierLogo} alt="Épée et Bouclier" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Zenith Supreme
                       </h3>
                     </div>
@@ -820,7 +874,7 @@ const Index = () => {
               </div>
 
               {/* Évolutions Prismatique */}
-              <div className="group relative flex-shrink-0 w-[350px]">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -853,8 +907,8 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">
-                        Évolutions Prismatique
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
+                        Évolutions Prismatiques
                       </h3>
                     </div>
                     <div className="flex items-center justify-center">
@@ -867,7 +921,7 @@ const Index = () => {
               </div>
 
               {/* Flammes Fantasmagoriques */}
-              <div className="group relative flex-shrink-0 w-[350px]">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -900,7 +954,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={megaEvolutionLogo} alt="Méga Évolution" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10">
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Flammes Fantasmagoriques
                       </h3>
                     </div>
@@ -914,7 +968,7 @@ const Index = () => {
               </div>
 
               {/* Foudre Noire */}
-              <div className="group relative flex-shrink-0 w-[350px]">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -947,7 +1001,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">
                         Foudre Noire
                       </h3>
                     </div>
@@ -962,7 +1016,7 @@ const Index = () => {
 
               {/* DUPLICATAS pour boucle infinie (copie exacte des 11 cartes ci-dessus) */}
               {/* Booster Destinées de Paldea - Copie */}
-              <div className="group relative flex-shrink-0 w-[350px]" aria-hidden="true">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterPaldean} alt="Booster Destinées de Paldea" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
@@ -977,7 +1031,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">Destinées de Paldea</h3>
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Destinées de Paldea</h3>
                     </div>
                     <div className="flex items-center justify-center">
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
@@ -987,7 +1041,7 @@ const Index = () => {
               </div>
 
               {/* Méga Évolution - Copie */}
-              <div className="group relative flex-shrink-0 w-[350px]" aria-hidden="true">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterMegaEvolution} alt="Booster Méga Évolution" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
@@ -1002,7 +1056,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={megaEvolutionLogo} alt="Méga Évolution" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">Méga Évolution</h3>
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Méga Évolution</h3>
                     </div>
                     <div className="flex items-center justify-center">
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
@@ -1012,7 +1066,7 @@ const Index = () => {
               </div>
 
               {/* Série 151 - Copie */}
-              <div className="group relative flex-shrink-0 w-[350px]" aria-hidden="true">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img 
@@ -1031,7 +1085,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">151</h3>
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">151</h3>
                     </div>
                     <div className="flex items-center justify-center">
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
@@ -1041,7 +1095,7 @@ const Index = () => {
               </div>
 
               {/* Rivalités Destinées - Copie */}
-              <div className="group relative flex-shrink-0 w-[350px]" aria-hidden="true">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterRivals} alt="Rivalités Destinées" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
@@ -1056,7 +1110,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">Rivalités Destinées</h3>
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Rivalités Destinées</h3>
                     </div>
                     <div className="flex items-center justify-center">
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
@@ -1066,7 +1120,7 @@ const Index = () => {
               </div>
 
               {/* Flamme Blanche - Copie */}
-              <div className="group relative flex-shrink-0 w-[350px]" aria-hidden="true">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterFlammeBlanche} alt="Booster Flamme Blanche" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
@@ -1081,7 +1135,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">Flamme Blanche</h3>
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Flamme Blanche</h3>
                     </div>
                     <div className="flex items-center justify-center">
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
@@ -1091,7 +1145,7 @@ const Index = () => {
               </div>
 
               {/* Poing de Fusion - Copie */}
-              <div className="group relative flex-shrink-0 w-[350px]" aria-hidden="true">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterPoingFusion} alt="Booster Poing de Fusion" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
@@ -1106,7 +1160,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={epeeBouclierLogo} alt="Épée et Bouclier" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">Poing de Fusion</h3>
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Poing de Fusion</h3>
                     </div>
                     <div className="flex items-center justify-center">
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
@@ -1116,7 +1170,7 @@ const Index = () => {
               </div>
 
               {/* Étincelles Déferlantes - Copie */}
-              <div className="group relative flex-shrink-0 w-[350px]" aria-hidden="true">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterSurging} alt="Booster Étincelles Déferlantes" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
@@ -1131,7 +1185,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">Étincelles Déferlantes</h3>
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Étincelles Déferlantes</h3>
                     </div>
                     <div className="flex items-center justify-center">
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
@@ -1141,7 +1195,7 @@ const Index = () => {
               </div>
 
               {/* Zenith Supreme - Copie */}
-              <div className="group relative flex-shrink-0 w-[350px]" aria-hidden="true">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-accent/50 transition-all duration-500 hover:shadow-lg hover:shadow-accent/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterEpeeBouclier} alt="Booster Zenith Supreme" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
@@ -1156,7 +1210,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={epeeBouclierLogo} alt="Épée et Bouclier" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">Zenith Supreme</h3>
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Zenith Supreme</h3>
                     </div>
                     <div className="flex items-center justify-center">
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
@@ -1166,7 +1220,7 @@ const Index = () => {
               </div>
 
               {/* Évolutions Prismatique - Copie */}
-              <div className="group relative flex-shrink-0 w-[350px]" aria-hidden="true">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterPrismatic} alt="Évolutions Prismatique" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
@@ -1181,7 +1235,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">Évolutions Prismatique</h3>
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Évolutions Prismatiques</h3>
                     </div>
                     <div className="flex items-center justify-center">
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
@@ -1191,7 +1245,7 @@ const Index = () => {
               </div>
 
               {/* Flammes Fantasmagoriques - Copie */}
-              <div className="group relative flex-shrink-0 w-[350px]" aria-hidden="true">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-secondary/50 transition-all duration-500 hover:shadow-lg hover:shadow-secondary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterFlammesFantasmagoriques} alt="Booster Flammes Fantasmagoriques" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
@@ -1206,7 +1260,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={megaEvolutionLogo} alt="Méga Évolution" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10">Flammes Fantasmagoriques</h3>
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Flammes Fantasmagoriques</h3>
                     </div>
                     <div className="flex items-center justify-center">
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
@@ -1216,7 +1270,7 @@ const Index = () => {
               </div>
 
               {/* Foudre Noire - Copie */}
-              <div className="group relative flex-shrink-0 w-[350px]" aria-hidden="true">
+              <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[350px]" aria-hidden="true">
                 <div className="relative min-h-[530px] rounded-2xl overflow-hidden bg-gradient-to-br from-card to-card/50 border-2 border-border hover:border-primary/50 transition-all duration-500 hover:shadow-lg hover:shadow-primary/10">
                   <div className="relative h-[400px] overflow-hidden bg-gradient-to-br from-muted/20 to-muted/10">
                     <img src={boosterFoudreNoire} alt="Booster Foudre Noire" className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform duration-700" />
@@ -1231,7 +1285,7 @@ const Index = () => {
                   <div className="p-6 space-y-4">
                     <div className="min-h-[80px] flex flex-col items-start relative">
                       <img src={ecarlateVioletLogo} alt="Écarlate et Violet" className="absolute top-[70%] left-0 -translate-y-1/2 w-[55%] h-auto object-contain opacity-100 pointer-events-none z-0" />
-                      <h3 className="text-2xl font-outfit font-extrabold leading-tight mb-2 relative z-10">Foudre Noire</h3>
+                      <h3 className="text-lg sm:text-xl font-outfit font-extrabold leading-tight mb-2 relative z-10 break-words">Foudre Noire</h3>
                     </div>
                     <div className="flex items-center justify-center">
                       <span className="text-xs bg-green-500/20 text-green-600 font-semibold px-3 py-1.5 rounded-full border border-green-500/30">En stock</span>
@@ -1347,22 +1401,22 @@ const Index = () => {
 
         {/* Call to action */}
         <ScrollAnimateWrapper animationType="fade" delay={100}>
-          <div className="mt-12 text-center">
-          <Card className="inline-block border-2 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5">
-            <CardContent className="p-8">
-              <div className="flex items-center gap-4 flex-col md:flex-row">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                  <Sparkles className="h-7 w-7 text-primary" />
+          <div className="mt-8 sm:mt-12 text-center px-4">
+          <Card className="inline-block border-2 bg-gradient-to-br from-primary/5 via-secondary/5 to-accent/5 max-w-full">
+            <CardContent className="p-4 sm:p-6 md:p-8">
+              <div className="flex items-center gap-3 sm:gap-4 flex-col md:flex-row">
+                <div className="flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                  <Sparkles className="h-6 w-6 sm:h-7 sm:w-7 text-primary" />
                 </div>
                 <div className="text-center md:text-left">
-                  <p className="font-semibold text-lg mb-1">Vous aussi, partagez votre expérience !</p>
-                  <p className="text-sm text-muted-foreground">Contactez-nous pour nous faire part de votre avis</p>
+                  <p className="font-semibold text-base sm:text-lg mb-1">Vous aussi, partagez votre expérience !</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Contactez-nous pour nous faire part de votre avis</p>
                 </div>
                 <Button 
-                  onClick={() => window.location.href = 'mailto:contact@catcht.fr'}
-                  className="gap-2 px-6"
+                  onClick={() => window.location.href = 'mailto:contact@catch-it.fr'}
+                  className="gap-2 px-4 sm:px-6 text-sm sm:text-base w-full md:w-auto"
                 >
-                  <Mail className="h-4 w-4" />
+                  <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                   Nous contacter
                 </Button>
               </div>
@@ -1373,40 +1427,40 @@ const Index = () => {
       </section>
 
       {/* Footer */}
-      <footer className="relative border-t bg-gradient-to-br from-card to-muted/30 mt-24 overflow-hidden">
+      <footer className="relative border-t bg-gradient-to-br from-card to-muted/30 mt-16 sm:mt-24 overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-[0.02]"></div>
         <ScrollAnimateWrapper animationType="fade">
-          <div className="container mx-auto px-4 py-16 relative">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 relative">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 mb-8 sm:mb-12">
             {/* Logo et description */}
-            <div className="flex flex-col items-center gap-4">
-              <img src={logo} alt="Catch'it Logo" className="h-16 w-auto opacity-90 hover:opacity-100 transition-opacity" />
-              <p className="text-sm text-muted-foreground text-center max-w-xs">
+            <div className="flex flex-col items-center gap-3 sm:gap-4">
+              <img src={logo} alt="Catch'it Logo" className="h-12 sm:h-16 w-auto opacity-90 hover:opacity-100 transition-opacity" />
+              <p className="text-xs sm:text-sm text-muted-foreground text-center max-w-xs px-4 sm:px-0">
                 Vos cartes Pokémon accessibles 24h/24 grâce à nos distributeurs nouvelle génération.
               </p>
             </div>
 
             {/* Contact */}
-            <div className="flex flex-col items-center gap-4">
-              <h3 className="font-outfit font-bold text-lg">Contact</h3>
-              <div className="space-y-3">
+            <div className="flex flex-col items-center gap-3 sm:gap-4">
+              <h3 className="font-outfit font-bold text-base sm:text-lg">Contact</h3>
+              <div className="space-y-2 sm:space-y-3 w-full max-w-xs flex flex-col items-center">
                 <a 
                   href="mailto:contact@catch-it.fr" 
-                  className="flex items-center gap-3 text-sm text-muted-foreground hover:text-primary transition-colors group"
+                  className="flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-primary transition-colors group w-full"
                 >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                    <Mail className="h-4 w-4 text-primary" />
+                  <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                    <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary" />
                   </div>
-                  <span>contact@catch-it.fr</span>
+                  <span className="break-all">contact@catch-it.fr</span>
                 </a>
                 <a 
                   href="https://instagram.com/catchit.fr" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-sm text-muted-foreground hover:text-secondary transition-colors group"
+                  className="flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-secondary transition-colors group w-full"
                 >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
-                    <Instagram className="h-4 w-4 text-secondary" />
+                  <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-secondary/10 group-hover:bg-secondary/20 transition-colors">
+                    <Instagram className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-secondary" />
                   </div>
                   <span>catchit.fr</span>
                 </a>
@@ -1414,24 +1468,24 @@ const Index = () => {
             </div>
 
             {/* Téléphone */}
-            <div className="flex flex-col items-center gap-4">
-              <h3 className="font-outfit font-bold text-lg">Appelez-nous</h3>
-              <div className="space-y-3">
+            <div className="flex flex-col items-center gap-3 sm:gap-4">
+              <h3 className="font-outfit font-bold text-base sm:text-lg">Appelez-nous</h3>
+              <div className="space-y-2 sm:space-y-3 w-full max-w-xs flex flex-col items-center">
                 <a 
                   href="tel:0662683668" 
-                  className="flex items-center gap-3 text-sm text-muted-foreground hover:text-accent transition-colors group"
+                  className="flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-accent transition-colors group w-full"
                 >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
-                    <Phone className="h-4 w-4 text-accent" />
+                  <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
+                    <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" />
                   </div>
                   <span>06 62 68 36 68</span>
                 </a>
                 <a 
                   href="tel:0783880177" 
-                  className="flex items-center gap-3 text-sm text-muted-foreground hover:text-accent transition-colors group"
+                  className="flex items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground hover:text-accent transition-colors group w-full"
                 >
-                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
-                    <Phone className="h-4 w-4 text-accent" />
+                  <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-accent/10 group-hover:bg-accent/20 transition-colors">
+                    <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-accent" />
                   </div>
                   <span>07 83 88 01 77</span>
                 </a>
@@ -1440,11 +1494,11 @@ const Index = () => {
           </div>
 
           {/* Copyright */}
-          <div className="pt-8 border-t text-center space-y-3">
-            <p className="text-sm text-muted-foreground font-semibold">
+          <div className="pt-6 sm:pt-8 border-t text-center space-y-2 sm:space-y-3">
+            <p className="text-xs sm:text-sm text-muted-foreground font-semibold px-4">
               © {new Date().getFullYear()} Catch'it. Tous droits réservés.
             </p>
-            <p className="text-xs text-muted-foreground/80 max-w-md mx-auto">
+            <p className="text-[10px] sm:text-xs text-muted-foreground/80 max-w-md mx-auto px-4">
               Pokémon et les noms de personnages Pokémon sont des marques déposées de Nintendo.
             </p>
           </div>
