@@ -87,6 +87,22 @@ const Index = () => {
     // Calculer la largeur réelle d'un set de cartes (on a 2 sets, donc la moitié du scrollWidth)
     const cardSetWidth = carousel.scrollWidth / 2;
     
+    let lastScrollTime = Date.now();
+    let userScrollTimeout: NodeJS.Timeout;
+    
+    // Détecter le scroll manuel de l'utilisateur (mobile touch scroll)
+    const handleScroll = () => {
+      lastScrollTime = Date.now();
+      isDraggingRef.current = true;
+      
+      clearTimeout(userScrollTimeout);
+      userScrollTimeout = setTimeout(() => {
+        isDraggingRef.current = false;
+      }, 150); // Reprendre le scroll auto après 150ms d'inactivité
+    };
+    
+    carousel.addEventListener('scroll', handleScroll, { passive: true });
+    
     const interval = setInterval(() => {
       if (carousel && !isDraggingRef.current) {
         // Incrémente le scroll
@@ -104,6 +120,8 @@ const Index = () => {
 
     return () => {
       clearInterval(interval);
+      clearTimeout(userScrollTimeout);
+      carousel.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -130,27 +148,6 @@ const Index = () => {
   };
 
   const handleMouseLeave = () => {
-    setIsDragging(false);
-    isDraggingRef.current = false;
-  };
-
-  // Support tactile (mobile)
-  const handleTouchStart = (e: React.TouchEvent) => {
-    if (!carouselRef.current) return;
-    setIsDragging(true);
-    isDraggingRef.current = true;
-    setStartX(e.touches[0].pageX - carouselRef.current.offsetLeft);
-    setScrollLeft(carouselRef.current.scrollLeft);
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging || !carouselRef.current) return;
-    const x = e.touches[0].pageX - carouselRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5; // Multiplier réduit pour plus de contrôle
-    carouselRef.current.scrollLeft = scrollLeft - walk;
-  };
-
-  const handleTouchEnd = () => {
     setIsDragging(false);
     isDraggingRef.current = false;
   };
@@ -488,14 +485,12 @@ const Index = () => {
             <div className="w-screen relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] overflow-hidden py-4">
             <div 
               ref={carouselRef}
-              className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 sm:pb-8 px-4 sm:px-0 scrollbar-hide cursor-grab active:cursor-grabbing select-none"
+              className="flex gap-4 sm:gap-6 overflow-x-auto pb-6 sm:pb-8 px-4 sm:px-0 scrollbar-hide cursor-grab active:cursor-grabbing select-none touch-pan-x"
+              style={{ touchAction: 'pan-x', WebkitOverflowScrolling: 'touch' }}
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
               onMouseLeave={handleMouseLeave}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
             >
               {/* Booster Destinées de Paldea */}
               <div className="group relative flex-shrink-0 w-[280px] sm:w-[320px] md:w-[280px] sm:w-[320px] md:w-[350px]">

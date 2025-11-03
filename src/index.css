@@ -312,3 +312,9 @@ All colors MUST be HSL.
 .animate-pulse-glow {
   animation: pulse-glow 8s ease-in-out infinite;
 }
+
+/* Touch action for mobile carousel */
+.touch-pan-x {
+  touch-action: pan-x;
+  -webkit-overflow-scrolling: touch;
+}
